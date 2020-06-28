@@ -28,10 +28,10 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <h2>My Tasks</h2>
+                <h2>User</h2>
                 <ul class="list-group">
-                    <li class="list-group-item" v-for="task in tasks">
-                        {{ task.name }}
+                    <li class="list-group-item" v-for="user in users">
+                        {{ user.name }} {{ user.age }} {{ user.location }}
                         <span class="pull-right">
                                 <button class="btn btn-xs btn-danger" v-on:click="deleteTask($index)">
                                     <i class="fa fa-trash-o" aria-hidden="true"></i>
@@ -40,12 +40,13 @@
                     </li>
                 </ul>
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="New Task" v-on:keyup.enter="createTask" v-model="newTask.name">
-                    <input type="text" class="form-control" placeholder="New Test" v-on:keyup.enter="createTask" v-model="newTask.test">
+                    <input type="text" class="form-control" placeholder="Your Name" v-on:keyup.enter="createUser" v-model="newUser.name">
+                    <input type="number" class="form-control" placeholder="Your Age" v-on:keyup.enter="createUser" v-model.number="newUser.age">
+                    <input type="text" class="form-control" placeholder="Your Location" v-on:keyup.enter="createUser" v-model="newUser.location">
 
                 </div>
                 <span class="input-group-btn">
-                    <button class="btn btn-primary" type="button" v-on:click="createTask">Create</button>
+                    <button class="btn btn-primary" type="button" v-on:click="createUser">Create</button>
                 </span>
                 <!-- /input-group -->
 
@@ -54,26 +55,27 @@
                         el: 'body',
 
                         data: {
-                            tasks: [],
-                            newTask: {}
+                            users: [],
+                            newUser: {}
                         },
 
                         // This is run whenever the page is loaded to make sure we have a current task list
 
                         methods: {
-                            createTask: function() {
+                            createUser: function() {
                                 // if (!$.trim(this.newTask.name)) {
                                 //     this.newTask = {}
                                 //     return
                                 // }
 
                                 // Post the new task to the /tasks route using the $http client
-                                this.$http.put('/tasks', this.newTask).success(function(response) {
-                                    this.newTask.id = response.created
-                                    this.tasks.push(this.newTask)
-                                    console.log("Task created!")
-                                    console.log(this.newTask)
-                                    this.newTask = {}
+                                console.log(this.newUser)
+                                this.$http.post('/users', this.newUser).success(function(response) {
+                                    this.newUser.id = response.created
+                                    this.users.push(this.newUser)
+                                    console.log("User created!")
+                                    console.log(this.newUser)
+                                    this.newUser = {}
                                 }).error(function(error) {
                                     console.log(error)
                                 });
